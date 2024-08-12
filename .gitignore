@@ -1,0 +1,10 @@
+# Python dependencies
+env
+__pycache__
+
+# Database
+*.db
+*.db-journal
+
+# Environment Variables 
+.env
