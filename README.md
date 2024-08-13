@@ -65,9 +65,11 @@ python main.py
 ## To run the frontend application
 
 1. Navigate to the frontend directory:
-   ```bash
-   cd frontend/
-   ```
+
+```bash
+cd frontend/
+```
+
 2. Install all dependencies using pnpm:
 
 ```bash
