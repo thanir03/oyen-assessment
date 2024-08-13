@@ -59,7 +59,7 @@ JWT_SECRET="your_secret_key"
 5. Run the backend application:
 
 ```bash
-JWT_SECRET="your_secret_key"
+python main.py
 ```
 
 ## To run the frontend application
