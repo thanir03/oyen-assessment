@@ -16,7 +16,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,7 +45,7 @@ def validatePassword(password: str):
       hasUpperCase = True
     if char.isdigit():
       hasDigit = True
-    if char in ['@', '$','!','%', '*', '?', '&']:
+    if char in ['@', '$','!','%', '*', '?', '&', '/']:
       hasSpecialCharacter = True
 
   return hasUpperCase and hasLowerCase and hasDigit and hasSpecialCharacter and satisfyMinLength 
@@ -84,6 +84,7 @@ async def register_user(user: AuthSchema, response: Response):
   token = jwt.encode(payload, os.getenv("JWT_SECRET"), algorithm="HS256")
   
   # Send jwt token in response body using username
+  response.status_code = status.HTTP_201_CREATED
   response.set_cookie(key="access_token", value=token, httponly=True, secure=True)
 
   return {"message": "Successfully registered user"}
@@ -91,7 +92,9 @@ async def register_user(user: AuthSchema, response: Response):
 
 # To login user using username and password
 @app.post("/login")
-async def login_user(user: AuthSchema, response: Response):
+async def login_user(request: Request, user: AuthSchema, response: Response):
+  if request.cookies.get('access_token'): 
+      response.delete_cookie('access_token')
   rows = findUser(cur, user.username)
   foundUser = None
   for row in rows: 
@@ -115,8 +118,8 @@ async def login_user(user: AuthSchema, response: Response):
   token = jwt.encode(payload, os.getenv("JWT_SECRET"), algorithm="HS256")
   
   # Send jwt token in response body using username
-  response.set_cookie(key="access_token", value=token, httponly=True, secure=True)
-
+  response.set_cookie(key="access_token", value=token , samesite="lax", secure=False)
+  response.status_code = status.HTTP_200_OK
   return {"message": "Successfully logged in user"}
 
 

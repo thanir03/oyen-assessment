@@ -27,8 +27,12 @@ const AuthProvider = (props: IAuthProviderProps) => {
     });
   }, []);
 
+  const handleLogin = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, handleLogout }}>
+    <AuthContext.Provider value={{ isLoggedIn, handleLogout, handleLogin }}>
       {props.children}
     </AuthContext.Provider>
   );
